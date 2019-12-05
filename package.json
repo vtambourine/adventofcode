@@ -1,0 +1,14 @@
+{
+  "name": "adventofcode",
+  "version": "0.1.0",
+  "description": "Awkward approach to Advent of Code 2019",
+  "author": "Benjamin T <vtambourine@ya.ru>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vtambourine/adventofcode.git"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2",
+    "prettier": "^1.19.1"
+  }
+}
