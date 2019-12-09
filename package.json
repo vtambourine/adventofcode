@@ -10,5 +10,8 @@
   "devDependencies": {
     "mocha": "^6.2.2",
     "prettier": "^1.19.1"
+  },
+  "prettier": {
+    "trailingComma": "es5"
   }
 }
