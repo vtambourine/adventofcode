@@ -17,7 +17,7 @@ function totalFuel(input) {
     let extra = fuelMass(mass);
     while (extra > 0) {
       fuel += extra;
-      extra = fuelMass(mass);
+      extra = fuelMass(extra);
     }
     return fuel;
   }, 0);
