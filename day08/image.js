@@ -15,10 +15,11 @@ function validate(input, { width, height } = { width: 25, height: 6 }) {
     }
   }
 
-  let counts = new Array(10).fill(0);
-  for (let d = layer; d < layer + width * height; d++) {
-    counts[parseInt(input[d], 10)]++;
-  }
+  let counts = input
+    .substring(layer, layer + width * height)
+    .split("")
+    .map(n => parseInt(n, 10))
+    .reduce((result, n) => (result[n]++, result), new Array(10).fill(0));
 
   return counts[1] * counts[2];
 }
@@ -27,21 +28,23 @@ function image(input, { width, height } = { width: 25, height: 6 }) {
   let result = new Array(width * height).fill("2");
   for (let d = 0; d < input.length; d++) {
     let i = d % (width * height);
-    console.log(d, input[d], i, result[i]);
     if (result[i] === "2") {
       result[i] = input[d];
     }
   }
 
-  let out = "";
-  for (let d = 0; d < result.length; d++) {
-    if (d % width === 0) {
-      console.log(out);
-      out = "";
-    }
-    out += result[d] === "0" ? " " : "X";
-  }
-  console.log(out);
+  // printImage(result, { width, height });
+
+  return result.join("");
+}
+
+function printImage(image, { width, height } = { width: 25, height: 6 }) {
+  console.log(
+    image.reduce((output, d, i) => {
+      if (i !== 0 && i % width === 0) output += "\n";
+      return (output += d === "0" ? " " : "X");
+    }, "")
+  );
 }
 
 module.exports = { validate, image };

@@ -25,8 +25,9 @@ suite("Day 8: Space Image Format", () => {
       });
     });
 
-    const expectedAnswer = "ZFLBY";
-    test(`Answer is ${expectedAnswer}`, () => {
+    const expectedAnswer =
+      "111101111010000111001000100010100001000010010100010010011100100001110001010010001000010000100100010010000100001000010010001001111010000111101110000100";
+    test(`Answer is ZFLBY`, () => {
       const input = fetchInput();
       assert.equal(image(input), expectedAnswer);
     });
