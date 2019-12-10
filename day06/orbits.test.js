@@ -34,7 +34,7 @@ suite("Day 6: Universal Orbit Map", () => {
   });
 
   suite("Part 2", () => {
-    test.only("Test cases are valid", () => {
+    test("Test cases are valid", () => {
       [
         [
           "COM)B\n" +
@@ -57,7 +57,7 @@ suite("Day 6: Universal Orbit Map", () => {
       });
     });
 
-    const expectedAnswer = 0;
+    const expectedAnswer = 307;
     test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
       assert.equal(transfers(input), expectedAnswer);
