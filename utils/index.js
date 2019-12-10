@@ -13,12 +13,11 @@ function fetchInput() {
     .trim()
     .match(`${projectName}\/([0-9a-z]+)\/`)[1];
 
-  const input = fs.readFileSync(
-    path.resolve(process.cwd(), dayName, `${dayName}.input`),
-    {
+  const input = fs
+    .readFileSync(path.resolve(process.cwd(), dayName, `${dayName}.input`), {
       encoding: "utf8",
-    }
-  );
+    })
+    .trim();
 
   return input;
 }
