@@ -7,7 +7,7 @@ const operators = [];
 // function diagnostic(program, input = 1) {
 function diagnostic(program, input = 5) {
   const codes = parseInput(program);
-
+  let output;
   let c = 0;
   while (c < codes.length) {
     const command = codes[c];
@@ -50,40 +50,41 @@ function diagnostic(program, input = 5) {
         parameters = [1].map((p, m) =>
           modes[m] ? codes[c + p] : codes[codes[c + p]]
         );
-        console.log(parameters[0]);
+        output = parameters[0];
+        // console.log("output", parameters[0]);
         c += 2;
         break;
       case 5:
         parameters = [1, 2].map((p, m) =>
           modes[m] ? codes[c + p] : codes[codes[c + p]]
         );
-        console.log("jump 5", parameters);
-        c = parameters[0] ? parameters[1] : c + 2;
+        // console.log("jump 5", parameters, modes, codes.join(" "));
+        c = parameters[0] ? parameters[1] : c + 3;
         break;
       case 6:
         parameters = [1, 2].map((p, m) =>
           modes[m] ? codes[c + p] : codes[codes[c + p]]
         );
-        console.log("jump 6", parameters);
-        c = parameters[0] === 0 ? parameters[1] : c + 2;
+        // console.log("jump 6", parameters);
+        c = parameters[0] === 0 ? parameters[1] : c + 3;
         break;
       case 7:
         parameters = [1, 2].map((p, m) =>
           modes[m] ? codes[c + p] : codes[codes[c + p]]
         );
         codes[codes[c + 3]] = parameters[0] < parameters[1] ? 1 : 0;
-        c += 2;
+        c += 4;
         break;
       case 8:
         parameters = [1, 2].map((p, m) =>
           modes[m] ? codes[c + p] : codes[codes[c + p]]
         );
         codes[codes[c + 3]] = parameters[0] === parameters[1] ? 1 : 0;
-        c += 2;
+        c += 4;
         break;
       case 99:
-        console.log("Done");
-        return;
+        // console.log("Done", output);
+        return output;
       default:
         throw new Error("Unknown operator code: " + operator);
     }
