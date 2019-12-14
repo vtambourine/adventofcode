@@ -2,10 +2,6 @@ function parseInput(input) {
   return input.split("-").map(n => parseInt(n, 10));
 }
 
-function valid(password) {
-  return false;
-}
-
 const HAS_DOUBLE_REGEX = /(\d)\1/;
 const HAS_DECREASING = /9[0-8]|8[0-7]|7[0-6]|6[0-5]|5[0-4]|4[0-3]|3[0-2]|2[0-1]|10/;
 
