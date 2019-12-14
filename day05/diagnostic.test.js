@@ -4,17 +4,17 @@ const { diagnostic } = require("./diagnostic");
 const { fetchInput } = require("../utils");
 
 suite("Day 5: Sunny with a Chance of Asteroids", () => {
-  suite.skip("Part 1", () => {
+  suite("Part 1", () => {
     test("Test cases are valid", () => {
-      [["1002,4,3,4,33", 1]].forEach(([input, expected]) => {
-        assert.equal(diagnostic(input, 1), expected);
+      [["3,0,4,0,99", 1, 1]].forEach(([program, input, expected]) => {
+        assert.equal(diagnostic(program, input, expected), expected);
       });
     });
 
-    const expectedAnswer = 1890;
+    const expectedAnswer = 5044655;
     test(`Answer is ${expectedAnswer}`, () => {
-      const input = fetchInput();
-      assert.equal(diagnostic(input, 1), expectedAnswer);
+      const program = fetchInput();
+      assert.equal(diagnostic(program, 1), expectedAnswer);
     });
   });
 
