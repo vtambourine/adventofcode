@@ -45,14 +45,12 @@ function* intcode(codes) {
         break;
       case 3: // Input
         let input = yield;
-        // console.log("input", input);
         codes[codes[cursor + 1]] = input;
         cursor += 2;
         break;
       case 4: // Output
         parameters = read(codes, { count: 1, cursor, modes });
         output = parameters[0];
-        // console.log("output", { output, codes });
         yield output;
         cursor += 2;
         break;
@@ -75,7 +73,6 @@ function* intcode(codes) {
         cursor += 4;
         break;
       case 99:
-        // console.log("Done", output);
         return output;
       default:
         throw new Error("Unknown operator code: " + operator);
