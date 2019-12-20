@@ -7,14 +7,13 @@ function parseInput(input) {
 function boost(program) {
   const codes = parseInput(program);
 
-  let output;
-
   const computer = new Computer(codes).run();
-  let guard = 18;
-  do {
-    output = computer.next(1);
-    console.log(">", output, "\n");
-  } while (!output.done && guard--);
+  let guard = 1800;
+  let output = computer.next(1);
+  while (!output.done) {
+    console.log(">", output.value);
+    output = computer.next();
+  }
 
   return output.value;
 }
