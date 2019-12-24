@@ -33,12 +33,12 @@ function image(input, { width, height } = { width: 25, height: 6 }) {
     }
   }
 
-  // printImage(result, { width, height });
+  // print(result, { width, height });
 
   return result.join("");
 }
 
-function printImage(image, { width, height } = { width: 25, height: 6 }) {
+function print(image, { width }) {
   console.log(
     image.reduce((output, d, i) => {
       if (i !== 0 && i % width === 0) output += "\n";
