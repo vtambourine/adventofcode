@@ -21,7 +21,7 @@ suite("Day 9: Sensor Boost", () => {
     });
 
     const expectedAnswer = 3100786347;
-    test(`Answer is`, () => {
+    test(`Answer is ${expectedAnswer}`, () => {
       const program = fetchInput();
       assert.equal(boost(program).pop(), expectedAnswer);
     });
@@ -29,7 +29,7 @@ suite("Day 9: Sensor Boost", () => {
 
   suite("Part 2", () => {
     const expectedAnswer = 87023;
-    test(`Answer is`, () => {
+    test(`Answer is ${expectedAnswer}`, () => {
       const program = fetchInput();
       assert.equal(boost(program, 2).pop(), expectedAnswer);
     });

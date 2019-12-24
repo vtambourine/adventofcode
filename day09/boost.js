@@ -1,7 +1,7 @@
-const { Computer } = require("./intcode");
+const { Computer } = require("../intcode/intcode");
 
 function parseInput(input) {
-  return input.split(",").map(n => parseInt(n, 10));
+  return input.split(",").map(Number);
 }
 
 function boost(program, input) {
@@ -15,15 +15,7 @@ function boost(program, input) {
       output.push(value);
     }
   ).run();
-  // let guard = 1800;
-  // let output = computer.next();
-  // while (!output.done) {
-  // console.log(">", output.value);
-  // output = computer.next();
-  // }
-  // console.log(computer);
-  // return output.value;
-  // return computer;
+
   return output;
 }
 
