@@ -1,5 +1,5 @@
 function parseInput(input) {
-  return input.split("-").map(n => parseInt(n, 10));
+  return input.split("-").map(Number);
 }
 
 const HAS_DOUBLE_REGEX = /(\d)\1/;
