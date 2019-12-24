@@ -71,14 +71,14 @@ suite("Day 10: Monitoring Station", () => {
           210,
         ],
       ].forEach(([input, expected]) => {
-        assert.equal(station(input), expected);
+        assert.equal(station(input).sight, expected);
       });
     });
 
     const expectedAnswer = 296;
     test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
-      assert.equal(station(input, 1), expectedAnswer);
+      assert.equal(station(input).sight, expectedAnswer);
     });
   });
 
@@ -116,7 +116,7 @@ suite("Day 10: Monitoring Station", () => {
     const expectedAnswer = 204;
     test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
-      assert.equal(vaporized(input, 1), expectedAnswer);
+      assert.equal(vaporized(input), expectedAnswer);
     });
   });
 });

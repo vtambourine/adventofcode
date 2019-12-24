@@ -5,14 +5,12 @@ function parseInput(input) {
 const ASTEROID = "#";
 
 function visibility([x, y], map) {
-  const schema = map.slice();
-  let slopes = [];
-  const quadrants = [[], [], [], []];
-  for (let i = 0; i < schema.length; i++) {
-    for (let j = 0; j < schema[i].length; j++) {
+  const slopes = [];
+  for (let i = 0; i < map.length; i++) {
+    for (let j = 0; j < map[i].length; j++) {
       if (i === x && j === y) continue;
-      if (schema[i][j] === ASTEROID) {
-        let slope = (Math.atan2(y - j, x - i) * 180) / Math.PI;
+      if (map[i][j] === ASTEROID) {
+        let slope = Math.atan2(y - j, x - i);
         if (!slopes.includes(slope)) {
           slopes.push(slope);
         }
@@ -24,15 +22,20 @@ function visibility([x, y], map) {
 
 function station(input) {
   const map = parseInput(input);
-  let asteroids = 0;
+  let sight = 0;
+  let base = [0, 0];
   for (let i = 0; i < map.length; i++) {
     for (let j = 0; j < map[i].length; j++) {
       if (map[i][j] === ASTEROID) {
-        asteroids = Math.max(visibility([i, j], map), asteroids);
+        let seen = visibility([i, j], map);
+        if (seen > sight) {
+          sight = seen;
+          base = [j, i];
+        }
       }
     }
   }
-  return asteroids;
+  return { base, sight };
 }
 
 function targets([x, y], map) {
@@ -53,8 +56,8 @@ function targets([x, y], map) {
     }
   }
 
-  for (let key of Object.keys(asteroids)) {
-    asteroids[key].sort(
+  for (let i of Object.keys(asteroids)) {
+    asteroids[i].sort(
       (a, b) => Math.hypot(x - a[0], y - a[1]) - Math.hypot(x - b[0], y - b[1])
     );
   }
@@ -62,37 +65,21 @@ function targets([x, y], map) {
   return asteroids;
 }
 
-function base(map) {
-  let asteroids = 0;
-  let coordinates = [0, 0];
-  for (let i = 0; i < map.length; i++) {
-    for (let j = 0; j < map[i].length; j++) {
-      if (map[i][j] === ASTEROID) {
-        let seen = visibility([i, j], map);
-        if (seen > asteroids) {
-          asteroids = seen;
-          coordinates = [j, i];
-        }
-      }
-    }
-  }
-  return coordinates;
-}
-
 function vaporized(input) {
   const map = parseInput(input);
+  const { base } = station(input);
 
-  let asteroids = targets(base(map), map);
+  const asteroids = targets(base, map);
 
-  let vaporized = 0;
-  let aims = Object.keys(asteroids)
+  const aims = Object.keys(asteroids)
     .map(Number)
     .sort();
 
   let slope = 0;
+  let vaporized = 0;
   let asteroid;
   while (vaporized < 200) {
-    let aim = aims[slope];
+    const aim = aims[slope];
     asteroid = asteroids[aim].shift();
     if (!asteroids[aim].length) {
       aims.splice(slope, 1);
