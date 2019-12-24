@@ -1,6 +1,6 @@
 const assert = require("assert");
 
-const { intersection, length } = require("./wires");
+const { closest, shortest } = require("./wires");
 const { fetchInput } = require("../utils");
 
 suite("Day 3: Crossed Wires", () => {
@@ -20,14 +20,14 @@ suite("Day 3: Crossed Wires", () => {
           135,
         ],
       ].forEach(([input, expected]) => {
-        assert.equal(intersection(input), expected);
+        assert.equal(closest(input), expected);
       });
     });
 
     const expectedAnswer = 1519;
     test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
-      assert.equal(intersection(input), expectedAnswer);
+      assert.equal(closest(input), expectedAnswer);
     });
   });
 
@@ -46,14 +46,14 @@ suite("Day 3: Crossed Wires", () => {
           410,
         ],
       ].forEach(([input, expected]) => {
-        assert.equal(length(input), expected);
+        assert.equal(shortest(input), expected);
       });
     });
 
     const expectedAnswer = 14358;
     test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
-      assert.equal(length(input), expectedAnswer);
+      assert.equal(shortest(input), expectedAnswer);
     });
   });
 });
