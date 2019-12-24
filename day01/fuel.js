@@ -1,5 +1,5 @@
 function parseInput(input) {
-  return input.split("\n").map(n => parseInt(n, 10));
+  return input.split("\n").map(Number);
 }
 
 function fuelMass(mass) {
