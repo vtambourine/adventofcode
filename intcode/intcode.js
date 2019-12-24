@@ -1,14 +1,14 @@
 class Computer {
-  constructor(codes, getInput, logOutput) {
-    this.memory = codes.reduce((result, code, index) => {
-      result[index] = code;
-      return result;
-    }, {});
-    this.getInput = getInput;
-    this.logOutput = logOutput;
+  constructor(codes, input, output) {
+    this.memory = codes.reduce(
+      (result, code, index) => ((result[index] = code), result),
+      {}
+    );
+    this.input = input;
+    this.output = output;
     this.cursor = -1;
     this.modes = [];
-    this.relativeBase = 0;
+    this.base = 0;
   }
 
   eof() {
@@ -40,7 +40,7 @@ class Computer {
     let value = this.next();
     switch (mode) {
       case 2: // relative mode
-        return this.memory[this.relativeBase + value] || 0;
+        return this.memory[this.base + value] || 0;
       case 1: // immediate mode
         return value;
       case 0: // positional mode
@@ -55,7 +55,7 @@ class Computer {
     let value = this.next();
     switch (mode) {
       case 2: // relative mode
-        return this.relativeBase + value;
+        return this.base + value;
       case 1: // immediate mode
         throw new Error(
           `Immediate mode is not supported at position ${this.cursor}`
@@ -92,11 +92,11 @@ class Computer {
     3: () => {
       // input
       let target = this.nextPosition();
-      this.memory[target] = this.getInput();
+      this.memory[target] = this.input();
     },
     4: () => {
       // output
-      this.logOutput(this.nextValue());
+      this.output(this.nextValue());
     },
     5: () => {
       // jump if true
@@ -116,7 +116,7 @@ class Computer {
     },
     9: () => {
       // adjust
-      this.relativeBase += this.nextValue();
+      this.base += this.nextValue();
     },
   };
 
