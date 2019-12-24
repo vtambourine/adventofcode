@@ -1,8 +1,8 @@
 function parseInput(input) {
-  return input.split(",").map(n => parseInt(n, 10));
+  return input.split(",").map(Number);
 }
 
-function intcode(input, { noun, verb } = { noun: 12, verb: 2 }) {
+function intcode(input, { noun, verb }) {
   const commands = parseInput(input);
   commands[1] = noun;
   commands[2] = verb;
@@ -27,16 +27,16 @@ function intcode(input, { noun, verb } = { noun: 12, verb: 2 }) {
   }
 }
 
-function targetInputs(input) {
-  const targetOutput = 19690720;
+function pick(input) {
+  const target = 19690720;
   for (let noun = 0; noun <= 99; noun++) {
     for (let verb = 0; verb <= 99; verb++) {
       const output = intcode(input, { noun, verb });
-      if (output === targetOutput) {
+      if (output === target) {
         return 100 * noun + verb;
       }
     }
   }
 }
 
-module.exports = { intcode, targetInputs };
+module.exports = { intcode, pick };
