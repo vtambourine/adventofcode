@@ -13,8 +13,14 @@ suite("Day 11: Space Police", () => {
   });
 
   suite("Part 2", () => {
-    const expectedAnswer = 0;
-    test(`Answer is ${expectedAnswer}`, () => {
+    const expectedAnswer =
+      " #  # #     ##  ####  ##  ####  ##  #  #   \n" +
+      " # #  #    #  #    # #  # #    #  # #  #   \n" +
+      " ##   #    #      #  #  # ###  #    #  #   \n" +
+      " # #  #    #     #   #### #    # ## #  #   \n" +
+      " # #  #    #  # #    #  # #    #  # #  #   \n" +
+      " #  # ####  ##  #### #  # ####  ###  ##    \n";
+    test("Answer is KLCZAEGU", () => {
       const program = fetchInput();
       assert.equal(print(program), expectedAnswer);
     });

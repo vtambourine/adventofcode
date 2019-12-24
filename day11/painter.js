@@ -1,42 +1,51 @@
-const { Computer } = require("./intcode");
+const { Computer } = require("../intcode/intcode");
 
 function parseInput(input) {
   return input.split(",").map(Number);
 }
 
 function rotate(vec, dir) {
-  if (dir === 0) {
-    // left
-    return [-vec[1], vec[0]];
-  } else if (dir === 1) {
-    // right
-    return [vec[1], -vec[0]];
-  }
+  return dir
+    ? // Right
+      [-vec[1], vec[0]]
+    : // Left
+      [vec[1], -vec[0]];
+}
+
+const PAINT = 0;
+const MOVE = 1;
+const states = [PAINT, MOVE];
+
+function key(coordinates) {
+  return coordinates.join(":");
+}
+
+function coordinates(key) {
+  return key.split(":").map(Number);
 }
 
 function painter(program, input) {
   const codes = parseInput(program);
 
-  let coord = [0, 0];
-  let dir = [0, -1];
+  const position = [0, 0];
+  let direction = [0, -1];
 
   let hull = {
-    "0:0": input || 0,
+    [key(position)]: input || 0,
   };
-  let state = "color";
+  let state = 0;
   new Computer(
     codes,
-    () => hull[coord.join(":")] || 0,
+    () => hull[key(position)] || 0,
     value => {
-      if (state === "color") {
-        hull[coord.join(":")] = value;
-        state = "direction";
-      } else if (state === "direction") {
-        dir = rotate(dir, value);
-        coord[0] += dir[0];
-        coord[1] += dir[1];
-        state = "color";
+      if (state === states[PAINT]) {
+        hull[key(position)] = value;
+      } else if (state === states[MOVE]) {
+        direction = rotate(direction, value);
+        position[0] += direction[0];
+        position[1] += direction[1];
       }
+      state = ++state % 2;
     }
   ).run();
 
@@ -46,44 +55,33 @@ function painter(program, input) {
 function print(program) {
   const hull = painter(program, 1);
 
-  // let [width, height] = hull.reduce(([width, height], panel) => {
-  //   let coord = panel.split(':');
-  //
-  // }, [0, 0]);
-
   let [left, right, top, bottom] = [Infinity, -Infinity, Infinity, -Infinity];
 
   for (let panel of Object.keys(hull)) {
-    let [x, y] = panel.split(":").map(Number);
+    let [x, y] = coordinates(panel);
     left = Math.min(x, left);
     right = Math.max(x, right);
     top = Math.min(y, top);
     bottom = Math.max(y, bottom);
-    // console.log(x, y, [left, right, top, bottom]);
   }
 
   let [width, height] = [right - left + 1, bottom - top + 1];
-  // console.log(hull);
-  console.log([left, right, top, bottom], [width, height]);
 
   let output = "";
   for (let j = 0; j < height; j++) {
     for (let i = 0; i < width; i++) {
-      let coord = `${left + i}:${top + j}`;
-      // console.log(coord);
-      if (hull[coord] === 1) {
+      let coordinates = key([left + i, top + j]);
+      if (hull[coordinates] === 1) {
         output += "#";
       } else {
         output += " ";
       }
     }
-    console.log(output);
-    output = "";
+    output += "\n";
   }
 
-  // console.log([left, right, top, bottom], [width, height]);
-
-  return -1;
+  // console.log(output);
+  return output;
 }
 
 module.exports = { painter, print };
