@@ -1,27 +1,23 @@
 function parseInput(input) {
-  return input.split("\n").map(o => o.split(")"));
+  return input
+    .split("\n")
+    .map(o => o.split(")"))
+    .reduce((map, [center, object]) => ((map[object] = center), map), {});
 }
 
 function checksum(input) {
   const orbits = parseInput(input);
 
-  const map = orbits.reduce((map, [center, object]) => {
-    map[object] = center;
-    return map;
-  }, {});
-
-  const checksum = Object.keys(map).reduce((counts, object) => {
+  return Object.keys(orbits).reduce((counts, object) => {
     while (object !== "COM") {
       counts++;
-      object = map[object];
+      object = orbits[object];
     }
     return counts;
   }, 0);
-
-  return checksum;
 }
 
-function orbitPath(object, map) {
+function path(object, map) {
   const path = [object];
   while (path[0] !== "COM") {
     path.unshift(map[path[0]]);
@@ -32,13 +28,8 @@ function orbitPath(object, map) {
 function transfers(input) {
   const orbits = parseInput(input);
 
-  const map = orbits.reduce(
-    (map, [center, object]) => ((map[object] = center), map),
-    {}
-  );
-
-  const sanPath = orbitPath("SAN", map);
-  const youPath = orbitPath("YOU", map);
+  const sanPath = path("SAN", orbits);
+  const youPath = path("YOU", orbits);
 
   for (let i = youPath.length - 1; i >= 0; i--) {
     if (youPath[i] === sanPath[i]) {
