@@ -8,13 +8,12 @@ function boost(program, input) {
   const codes = parseInput(program);
 
   let output = [];
-  new Computer(
-    codes,
+  new Computer(codes).run(
     () => input || 1,
     value => {
       output.push(value);
     }
-  ).run();
+  );
 
   return output;
 }
