@@ -9,10 +9,15 @@ class Computer {
     this.cursor = -1;
     this.modes = [];
     this.base = 0;
+    this.halted = false;
   }
 
   eof() {
     return !this.memory.hasOwnProperty(this.cursor + 1);
+  }
+
+  halt() {
+    this.halted = true;
   }
 
   next() {
@@ -31,7 +36,6 @@ class Computer {
       this.modes.push(mode % 10);
       mode = Math.floor(mode / 10);
     } while (mode);
-
     return operator;
   }
 
@@ -39,11 +43,11 @@ class Computer {
     let mode = this.modes.shift() || 0;
     let value = this.next();
     switch (mode) {
-      case 2: // relative mode
+      case 2: // Relative mode
         return this.memory[this.base + value] || 0;
-      case 1: // immediate mode
+      case 1: // Immediate mode
         return value;
-      case 0: // positional mode
+      case 0: // Position mode
         return this.memory[value] || 0;
       default:
         throw new Error(`Unexpected mode ${mode} at position ${this.cursor}`);
@@ -54,13 +58,13 @@ class Computer {
     let mode = this.modes.shift() || 0;
     let value = this.next();
     switch (mode) {
-      case 2: // relative mode
+      case 2: // Relative mode
         return this.base + value;
-      case 1: // immediate mode
+      case 1: // Immediate mode
         throw new Error(
           `Immediate mode is not supported at position ${this.cursor}`
         );
-      case 0: // positional mode
+      case 0: // Position mode
         return value;
       default:
         throw new Error(`Unexpected mode ${mode} at position ${this.cursor}`);
@@ -83,45 +87,49 @@ class Computer {
   }
 
   operations = {
+    // Addition
     1: () => {
       this.runOperation((x, y) => x + y);
     },
+    // Multiplication
     2: () => {
       this.runOperation((x, y) => x * y);
     },
+    // Input
     3: () => {
-      // input
       let target = this.nextPosition();
       this.memory[target] = this.input();
     },
+    // Output
     4: () => {
-      // output
       this.output(this.nextValue());
     },
+    // Jump if true
     5: () => {
-      // jump if true
       this.executeJump(Boolean);
     },
+    // Jump if false
     6: () => {
-      // jump if false
       this.executeJump(x => !x);
     },
+    // Less than
     7: () => {
-      // less than
       this.runOperation((x, y) => (x < y ? 1 : 0));
     },
+    // Equals
     8: () => {
-      // equals
       this.runOperation((x, y) => (x === y ? 1 : 0));
     },
+    // Adjust relative base
     9: () => {
-      // adjust
       this.base += this.nextValue();
     },
   };
 
-  run() {
-    while (!this.eof()) {
+  run(input, output) {
+    this.input = input;
+    this.output = output;
+    while (!this.halted && !this.eof()) {
       let command = this.nextCommand();
       if (command === 99) {
         return;
