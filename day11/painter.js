@@ -34,8 +34,7 @@ function painter(program, input) {
     [key(position)]: input || 0,
   };
   let state = 0;
-  new Computer(
-    codes,
+  new Computer(codes).run(
     () => hull[key(position)] || 0,
     value => {
       if (state === states[PAINT]) {
@@ -47,7 +46,7 @@ function painter(program, input) {
       }
       state = ++state % 2;
     }
-  ).run();
+  );
 
   return hull;
 }
