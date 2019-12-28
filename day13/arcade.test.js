@@ -1,6 +1,6 @@
 const assert = require("assert");
 
-const { blocks } = require("./arcade");
+const { blocks, game } = require("./arcade");
 const { fetchInput } = require("../utils");
 
 suite("Day 13: Care Package", () => {
@@ -9,6 +9,14 @@ suite("Day 13: Care Package", () => {
     test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
       assert.equal(blocks(input), expectedAnswer);
+    });
+  });
+
+  suite("Part 2", () => {
+    const expectedAnswer = 12099;
+    test(`Answer is ${expectedAnswer}`, () => {
+      const input = fetchInput();
+      assert.equal(game(input), expectedAnswer);
     });
   });
 });
