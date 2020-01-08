@@ -32,7 +32,19 @@ function isDoor(symbol) {
   return "A" <= symbol && symbol <= "Z";
 }
 
+let i = 0;
+const reachMemo = {};
 function reachable(map, start, availableKeys) {
+  if (
+    reachMemo[availableKeys] &&
+    reachMemo[availableKeys][start[0]] &&
+    reachMemo[availableKeys][start[0]][start[1]]
+  ) {
+    i++;
+    // console.log(reachMemo);
+    return reachMemo[availableKeys][start[0]][start[1]];
+  }
+
   const keys = {};
   const visited = { [String(start)]: 0 };
   const queue = [start];
@@ -58,7 +70,7 @@ function reachable(map, start, availableKeys) {
         continue;
       } else if (
         isDoor(symbol) &&
-        !hasKey(availableKeys, symbol.toLocaleString())
+        !hasKey(availableKeys, symbol.toLowerCase())
       ) {
         continue;
       } else if (isKey(symbol) && !hasKey(availableKeys, symbol)) {
@@ -69,13 +81,18 @@ function reachable(map, start, availableKeys) {
     }
   }
 
+  reachMemo[availableKeys] = reachMemo[availableKeys] || {};
+  reachMemo[availableKeys][start[0]] = reachMemo[availableKeys][start[0]] || {};
+  reachMemo[availableKeys][start[0]][start[1]] = keys;
+
   return keys;
 }
 
 const memo = {};
-function walk(map, start, availableKeys) {
-  if (memo[String(start.concat(availableKeys))]) {
-    return memo[String(start.concat(availableKeys))];
+function walk(map, start, availableKeys = 0) {
+  const hash = String(start.concat(availableKeys));
+  if (memo[hash]) {
+    return memo[hash];
   }
 
   const keys = reachable(map, start, availableKeys);
@@ -84,15 +101,12 @@ function walk(map, start, availableKeys) {
   if (Object.keys(keys).length === 0) {
     result = 0;
   } else {
-    let minimumWalk = [];
+    result = Infinity;
     for (let [key, [distance, location]] of Object.entries(keys)) {
       const subWalk = walk(map, location, addKey(availableKeys, key));
-      minimumWalk.push(distance + subWalk);
+      result = Math.min(distance + subWalk, result);
     }
-
-    result = minimumWalk.sort().shift();
-
-    memo[String(start.concat(availableKeys))] = result;
+    memo[hash] = result;
   }
   return result;
 }
@@ -111,9 +125,12 @@ function path(input) {
     }
   }
 
-  const minimumWalk = walk(map, [x, y], []);
-
+  const minimumWalk = walk(map, [x, y]);
+  // console.log(i);
+  // console.log(JSON.stringify(reachMemo));
   return minimumWalk;
 }
 
-module.exports = { path };
+function pathFour(input) {}
+
+module.exports = { path, pathFour };
