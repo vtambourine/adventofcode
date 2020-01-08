@@ -12,6 +12,18 @@ const DIRECTIONS = [
   [1, 0],
 ];
 
+const aCharCode = "a".charCodeAt(0);
+
+function hasKey(keyMap, symbol) {
+  const code = symbol.charCodeAt(0) - aCharCode;
+  return keyMap & (1 << code);
+}
+
+function addKey(keyMap, symbol) {
+  const code = symbol.charCodeAt(0) - aCharCode;
+  return keyMap | (1 << code);
+}
+
 function isKey(symbol) {
   return "a" <= symbol && symbol <= "z";
 }
@@ -20,7 +32,7 @@ function isDoor(symbol) {
   return "A" <= symbol && symbol <= "Z";
 }
 
-function reachable(map, start, availableKeys = []) {
+function reachable(map, start, availableKeys) {
   const keys = {};
   const visited = { [String(start)]: 0 };
   const queue = [start];
@@ -44,14 +56,13 @@ function reachable(map, start, availableKeys = []) {
       const symbol = map[yp][xp];
       if (symbol === WALL) {
         continue;
-      }
-
-      if (isKey(symbol) && !availableKeys.includes(symbol)) {
-        keys[symbol] = [visited[point], [xp, yp]];
-      }
-
-      if (isDoor(symbol) && !availableKeys.includes(symbol.toLowerCase())) {
+      } else if (
+        isDoor(symbol) &&
+        !hasKey(availableKeys, symbol.toLocaleString())
+      ) {
         continue;
+      } else if (isKey(symbol) && !hasKey(availableKeys, symbol)) {
+        keys[symbol] = [visited[point], [xp, yp]];
       }
 
       queue.push([xp, yp]);
@@ -63,50 +74,33 @@ function reachable(map, start, availableKeys = []) {
 
 const memo = {};
 function walk(map, start, availableKeys) {
-  const sortedKeys = availableKeys.sort();
-  const keys = reachable(map, start, sortedKeys.slice());
-
-  if (memo[String(start.concat(sortedKeys))]) {
-    // console.log("found!");
-    return memo[String(start.concat(sortedKeys))];
+  if (memo[String(start.concat(availableKeys))]) {
+    return memo[String(start.concat(availableKeys))];
   }
 
-  // if (Object.keys(memo).length % 10) {
-  // console.log("cache size", Object.keys(memo).length);
-  // }
+  const keys = reachable(map, start, availableKeys);
 
-  let ans = 0;
-  // console.log("walk form", start, "with", availableKeys, "got", keys);
+  let result;
   if (Object.keys(keys).length === 0) {
-    ans = 0;
+    result = 0;
   } else {
-    let ndist = [];
-    for (let [k, [dist, nstart]] of Object.entries(keys)) {
-      const nw = walk(map, nstart, sortedKeys.concat(k).sort());
-      // console.log(".. reach for", k, dist, "aways", "=", nw);
-      ndist.push(dist + nw);
+    let minimumWalk = [];
+    for (let [key, [distance, location]] of Object.entries(keys)) {
+      const subWalk = walk(map, location, addKey(availableKeys, key));
+      minimumWalk.push(distance + subWalk);
     }
 
-    ans = ndist.sort().shift();
-    // console.log(ans);
+    result = minimumWalk.sort().shift();
 
-    memo[String(start.concat(sortedKeys))] = ans;
+    memo[String(start.concat(availableKeys))] = result;
   }
-
-  // console.log(memo);
-
-  return ans;
+  return result;
 }
 
 function path(input) {
   const map = parseInput(input);
   const width = map[0].length;
   const height = map.length;
-
-  // console.log({ width, height });
-
-  const xy2i = ([x, y]) => y * width + x;
-  const i2xy = i => [i % width, Math.floor(i / width)];
 
   let [x, y] = [-1, -1];
   for (let j = 0; j < height; j++) {
@@ -117,14 +111,9 @@ function path(input) {
     }
   }
 
-  // console.log({ x, y });
+  const minimumWalk = walk(map, [x, y], []);
 
-  // reachable(map, [x, y]);
-
-  const w = walk(map, [x, y], []);
-  // console.log(w);
-
-  return w;
+  return minimumWalk;
 }
 
 module.exports = { path };
