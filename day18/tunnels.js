@@ -23,6 +23,10 @@ function isDoor(symbol) {
   return "A" <= symbol && symbol <= "Z";
 }
 
+function isEntrance(symbol) {
+  return ":" <= symbol && symbol <= "@";
+}
+
 function hasKey(keyMap, symbol) {
   const key = isDoor(symbol)
     ? symbol.charCodeAt(0) - MAJUSCULE_A
@@ -133,23 +137,25 @@ function walk(keys, start, availableKeys = 0, cache = {}) {
 
 function path(input) {
   const map = parseInput(input);
-  const width = map[0].length;
-  const height = map.length;
+  console.log(input);
 
   const keys = {};
+  const entrances = [];
 
   let [x, y] = [-1, -1];
-  for (let j = 0; j < height; j++) {
-    for (let i = 0; i < width; i++) {
+  for (let j = 0; j < map.length; j++) {
+    for (let i = 0; i < map[0].length; i++) {
       if (map[j][i] === ENTRANCE) {
         [x, y] = [i, j];
         keys[ENTRANCE] = { position: [i, j], links: {} };
+        entrances.push([i, j]);
       } else if (isKey(map[j][i])) {
         keys[map[j][i]] = { position: [i, j], links: {} };
       }
     }
   }
 
+  // console.time("positioning");
   const keyPositions = Object.keys(keys);
   for (let i = 0; i < keyPositions.length; i++) {
     const aKeyName = keyPositions[i];
@@ -162,14 +168,40 @@ function path(input) {
       bKey.links[aKeyName] = ln;
     }
   }
+  // console.timeEnd("positioning");
 
-  console.time("walk");
+  // console.log(entrances);
+  // console.log(keys);
+
+  // console.time("walk");
   const minimumWalk = walk(keys, ENTRANCE, 0);
-  console.timeEnd("walk");
+  // console.timeEnd("walk");
 
   return minimumWalk;
 }
 
-function pathFour(input) {}
+function pathFour(input) {
+  const map = parseInput(input);
+
+  outer: for (let j = 0; j < map.length; j++) {
+    for (let i = 0; i < map[0].length; i++) {
+      if (map[j][i] === ENTRANCE) {
+        map[j - 1][i - 1] = ENTRANCE;
+        map[j - 1][i] = WALL;
+        map[j - 1][i + 1] = ENTRANCE;
+        map[j][i - 1] = WALL;
+        map[j][i] = WALL;
+        map[j][i + 1] = WALL;
+        map[j + 1][i - 1] = ENTRANCE;
+        map[j + 1][i] = WALL;
+        map[j + 1][i + 1] = ENTRANCE;
+        break outer;
+      }
+    }
+  }
+
+  const updatedInput = map.map(row => row.join("")).join("\n");
+  return path(updatedInput);
+}
 
 module.exports = { path, pathFour };

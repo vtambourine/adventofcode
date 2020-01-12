@@ -38,7 +38,7 @@ suite("Day 18: Many-Worlds Interpretation", () => {
       });
     });
 
-    test("Large test cases are valid", () => {
+    test.skip("Large test cases are valid", () => {
       [
         [
           "#################\n" +
@@ -58,14 +58,14 @@ suite("Day 18: Many-Worlds Interpretation", () => {
     });
 
     const expectedAnswer = 5182;
-    test(`Answer is ${expectedAnswer}`, () => {
+    test.skip(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
       assert.equal(path(input), expectedAnswer);
     });
   });
 
-  suite.skip("Part 2", () => {
-    test("Test cases are valid", () => {
+  suite("Part 2", () => {
+    test.only("Test cases are valid", () => {
       [
         [
           "#######\n" +
@@ -93,7 +93,7 @@ suite("Day 18: Many-Worlds Interpretation", () => {
     });
 
     const expectedAnswer = 2154;
-    test(`Answer is ${expectedAnswer}`, () => {
+    test.skip(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
       assert.equal(pathFour(input), expectedAnswer);
     });
