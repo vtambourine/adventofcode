@@ -1,11 +1,11 @@
 class Computer {
-  constructor(codes, input, output) {
+  constructor(codes) {
     this.memory = codes.reduce(
       (result, code, index) => ((result[index] = code), result),
       {}
     );
-    this.input = input;
-    this.output = output;
+    this.input = () => undefined;
+    this.output = () => undefined;
     this.cursor = -1;
     this.modes = [];
     this.base = 0;
