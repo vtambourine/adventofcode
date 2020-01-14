@@ -1,6 +1,6 @@
 const assert = require("assert");
 
-const { path, pathFour } = require("./tunnels");
+const { path, multipath } = require("./tunnels");
 const { fetchInput } = require("../utils");
 
 suite("Day 18: Many-Worlds Interpretation", () => {
@@ -38,7 +38,7 @@ suite("Day 18: Many-Worlds Interpretation", () => {
       });
     });
 
-    test.skip("Large test cases are valid", () => {
+    test("Large test cases are valid", () => {
       [
         [
           "#################\n" +
@@ -58,14 +58,14 @@ suite("Day 18: Many-Worlds Interpretation", () => {
     });
 
     const expectedAnswer = 5182;
-    test.skip(`Answer is ${expectedAnswer}`, () => {
+    test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
       assert.equal(path(input), expectedAnswer);
     });
   });
 
   suite("Part 2", () => {
-    test.only("Test cases are valid", () => {
+    test("Test cases are valid", () => {
       [
         [
           "#######\n" +
@@ -85,17 +85,39 @@ suite("Day 18: Many-Worlds Interpretation", () => {
             "######...######\n" +
             "#b.....#.....c#\n" +
             "###############",
+          24,
+        ],
+        [
+          "#############\n" +
+            "#DcBa.#.GhKl#\n" +
+            "#.###...#I###\n" +
+            "#e#d#.@.#j#k#\n" +
+            "###C#...###J#\n" +
+            "#fEbA.#.FgHi#\n" +
+            "#############",
+          32,
+        ],
+        [
+          "#############\n" +
+            "#g#f.D#..h#l#\n" +
+            "#F###e#E###.#\n" +
+            "#dCba...BcIJ#\n" +
+            "#####.@.#####\n" +
+            "#nK.L...G...#\n" +
+            "#M###N#H###.#\n" +
+            "#o#m..#i#jk.#\n" +
+            "#############",
           72,
         ],
       ].forEach(([input, expected]) => {
-        assert.equal(pathFour(input), expected);
+        assert.equal(multipath(input), expected);
       });
     });
 
     const expectedAnswer = 2154;
-    test.skip(`Answer is ${expectedAnswer}`, () => {
+    test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
-      assert.equal(pathFour(input), expectedAnswer);
+      assert.equal(multipath(input), expectedAnswer);
     });
   });
 });

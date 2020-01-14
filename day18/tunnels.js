@@ -24,7 +24,7 @@ function isDoor(symbol) {
 }
 
 function isEntrance(symbol) {
-  return ":" <= symbol && symbol <= "@";
+  return "0" <= symbol && symbol <= "9";
 }
 
 function hasKey(keyMap, symbol) {
@@ -41,8 +41,12 @@ function addKey(keyMap, symbol) {
   return keyMap | (1 << key);
 }
 
-function cacheKey() {
-  return String([...arguments]);
+function canOpen(keyMap, doorMap) {
+  return (keyMap & doorMap) === doorMap;
+}
+
+function cacheKey(a, b, c = "", d = "", e = "") {
+  return [a, b, c, d, e].join();
 }
 
 function neighbours(map, [x, y]) {
@@ -61,9 +65,7 @@ function neighbours(map, [x, y]) {
   }).filter(neighbour => neighbour);
 }
 
-function link(map, sourceKey, targetKey) {
-  const keys = {};
-
+function connections(map, sourceKey, targetKey) {
   const [sx, sy] = sourceKey.position;
   const [tx, ty] = targetKey.position;
   const queue = [[sx, sy, 0, 0]];
@@ -90,54 +92,50 @@ function link(map, sourceKey, targetKey) {
       queue.push([xp, yp, distance + 1, nextDoors]);
     }
   }
-
-  return keys;
 }
 
-function walk(keys, start, availableKeys = 0, cache = {}) {
-  // console.log("\n--");
-  // console.log(totalKeys);
-  // console.log(keys);
-  // console.log("start", start);
-
-  const hash = cacheKey(start, availableKeys);
-  if (cache[hash]) {
-    return cache[hash];
-  }
-
-  const key = keys[start];
+function walk(keys, positions, keychain = 0, cache = {}) {
+  const hash = cacheKey(...positions, keychain);
+  if (cache[hash]) return cache[hash];
 
   const remainingKeys = Object.keys(keys).filter(
-    k => k !== ENTRANCE && !hasKey(availableKeys, k)
+    key => !isEntrance(key) && !hasKey(keychain, key)
   );
 
-  // console.log("remaining keys", remainingKeys);
+  if (remainingKeys.length === 0) return (cache[hash] = 0);
 
-  const reachableKeys = remainingKeys.filter(
-    k => (availableKeys & key.links[k].doors) === key.links[k].doors
-  );
-
-  // console.log("reachable", reachableKeys);
-
-  if (reachableKeys.length === 0) {
-    cache[hash] = 0;
-    return 0;
+  let reachableKeys = new Map();
+  for (let p = 0; p < positions.length; p++) {
+    const position = keys[positions[p]];
+    for (let key of remainingKeys) {
+      if (
+        position.connections[key] &&
+        canOpen(keychain, position.connections[key].doors)
+      ) {
+        reachableKeys.set(key, p);
+      }
+    }
   }
 
   let result = Infinity;
-  for (let rk of reachableKeys) {
-    const distance = key.links[rk].distance;
-    const subDistance = walk(keys, rk, addKey(availableKeys, rk), cache);
+  for (let [key, position] of reachableKeys) {
+    let stand = keys[positions[position]];
+    const distance = stand.connections[key].distance;
+
+    let nextPositions = [...positions];
+    nextPositions[position] = key;
+    let nextKeychain = addKey(keychain, key);
+
+    const subDistance = walk(keys, nextPositions, nextKeychain, cache);
     result = Math.min(distance + subDistance, result);
   }
-  cache[hash] = result;
 
+  cache[hash] = result;
   return result;
 }
 
 function path(input) {
   const map = parseInput(input);
-  console.log(input);
 
   const keys = {};
   const entrances = [];
@@ -147,40 +145,35 @@ function path(input) {
     for (let i = 0; i < map[0].length; i++) {
       if (map[j][i] === ENTRANCE) {
         [x, y] = [i, j];
-        keys[ENTRANCE] = { position: [i, j], links: {} };
-        entrances.push([i, j]);
+        keys[entrances.length] = { position: [i, j] };
+        entrances.push(entrances.length);
       } else if (isKey(map[j][i])) {
-        keys[map[j][i]] = { position: [i, j], links: {} };
+        keys[map[j][i]] = { position: [i, j] };
       }
     }
   }
 
-  // console.time("positioning");
-  const keyPositions = Object.keys(keys);
-  for (let i = 0; i < keyPositions.length; i++) {
-    const aKeyName = keyPositions[i];
+  const enumeratedKeys = Object.keys(keys);
+  for (let i = 0; i < enumeratedKeys.length; i++) {
+    const aKeyName = enumeratedKeys[i];
     const aKey = keys[aKeyName];
-    for (let j = i + 1; j < keyPositions.length; j++) {
-      const bKeyName = keyPositions[j];
+    for (let j = i + 1; j < enumeratedKeys.length; j++) {
+      const bKeyName = enumeratedKeys[j];
       const bKey = keys[bKeyName];
-      const ln = link(map, aKey, bKey);
-      aKey.links[bKeyName] = ln;
-      bKey.links[aKeyName] = ln;
+      const connection = connections(map, aKey, bKey);
+      if (connection) {
+        (aKey.connections = aKey.connections || {})[bKeyName] = connection;
+        (bKey.connections = bKey.connections || {})[aKeyName] = connection;
+      }
     }
   }
-  // console.timeEnd("positioning");
 
-  // console.log(entrances);
-  // console.log(keys);
-
-  // console.time("walk");
-  const minimumWalk = walk(keys, ENTRANCE, 0);
-  // console.timeEnd("walk");
+  const minimumWalk = walk(keys, entrances);
 
   return minimumWalk;
 }
 
-function pathFour(input) {
+function multipath(input) {
   const map = parseInput(input);
 
   outer: for (let j = 0; j < map.length; j++) {
@@ -204,4 +197,4 @@ function pathFour(input) {
   return path(updatedInput);
 }
 
-module.exports = { path, pathFour };
+module.exports = { path, multipath };
