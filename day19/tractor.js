@@ -35,7 +35,7 @@ function scan(program, [width, height] = [50, 50]) {
   return area;
 }
 
-function ship(program) {
+function ship(program, size = 100) {
   const codes = parseInput(program);
 
   function probe(x, y) {
@@ -49,9 +49,9 @@ function ship(program) {
   }
 
   let [x, y] = [0, 0];
-  while (probe(x + 99, y) === STATIONARY) {
+  while (probe(x + size - 1, y) === STATIONARY) {
     y++;
-    while (probe(x, y + 99) === STATIONARY) {
+    while (probe(x, y + size - 1) === STATIONARY) {
       x++;
     }
   }

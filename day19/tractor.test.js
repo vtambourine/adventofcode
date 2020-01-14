@@ -16,7 +16,7 @@ suite("Day 19: Tractor Beam", () => {
     const expectedAnswer = 7001134;
     test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
-      assert.equal(ship(input), expectedAnswer);
+      assert.equal(ship(input, 100), expectedAnswer);
     });
   });
 });
