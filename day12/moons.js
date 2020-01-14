@@ -12,6 +12,18 @@ function parseInput(input) {
     ]);
 }
 
+function hash(a, b) {
+  return `${a}:${b}`;
+}
+
+function gcd(x, y) {
+  return y === 0 ? x : gcd(y, x % y);
+}
+
+function lcm(x, y) {
+  return x === 0 || y === 0 ? 0 : Math.abs(x * y) / gcd(x, y);
+}
+
 function total(moons) {
   return moons.reduce(
     (energy, moon) =>
@@ -25,23 +37,27 @@ function total(moons) {
   );
 }
 
+function gravitate(moons) {
+  for (let moon of moons) {
+    for (let other of moons) {
+      if (other === moon) continue;
+      for (let i = 0; i < 3; i++) {
+        moon[1][i] += Math.min(Math.max(other[0][i] - moon[0][i], -1), 1);
+      }
+    }
+  }
+}
+
 function energy(input, steps) {
   const moons = parseInput(input);
 
   let step = steps;
   while (step--) {
-    for (let m of moons) {
-      for (let other of moons) {
-        if (other === m) continue;
-        for (let i = 0; i < 3; i++) {
-          m[1][i] += Math.min(Math.max(other[0][i] - m[0][i], -1), 1);
-        }
-      }
-    }
+    gravitate(moons);
 
-    for (let m of moons) {
+    for (let moon of moons) {
       for (let i = 0; i < 3; i++) {
-        m[0][i] += m[1][i];
+        moon[0][i] += moon[1][i];
       }
     }
   }
@@ -49,21 +65,13 @@ function energy(input, steps) {
   return total(moons);
 }
 
-function gcd(x, y) {
-  return y === 0 ? x : gcd(y, x % y);
-}
-
-function lcm(x, y) {
-  return x === 0 || y === 0 ? 0 : Math.abs(x * y) / gcd(x, y);
-}
-
 function loop(input) {
   const moons = parseInput(input);
+
   const original = moons.reduce(
-    (hashes, moon) => {
-      let [pos, vel] = moon;
+    (hashes, [position, velocity]) => {
       for (let i of [0, 1, 2]) {
-        hashes[i] += `${pos[i]}:${vel[i]} `;
+        hashes[i] += hash(position[i], velocity[i]);
       }
       return hashes;
     },
@@ -71,38 +79,30 @@ function loop(input) {
   );
 
   let loops = new Array(3).fill(0);
-  let l = 0;
-  while (loops.some(l => l === 0)) {
-    l++;
-    for (let m of moons) {
-      for (let other of moons) {
-        if (other === m) continue;
-        for (let i = 0; i < 3; i++) {
-          m[1][i] += Math.min(Math.max(other[0][i] - m[0][i], -1), 1);
-        }
-      }
-    }
+  let loop = 0;
+  while (loops.some(loop => loop === 0)) {
+    loop++;
+    gravitate(moons);
 
-    for (let m of moons) {
+    for (let moon of moons) {
       for (let i = 0; i < 3; i++) {
-        m[0][i] += m[1][i];
+        moon[0][i] += moon[1][i];
       }
     }
 
     let hashes = moons.reduce(
-      (hashes, moon) => {
-        let [pos, vel] = moon;
+      (hashes, [position, velocity]) => {
         for (let i of [0, 1, 2]) {
-          hashes[i] += `${pos[i]}:${vel[i]} `;
+          hashes[i] += hash(position[i], velocity[i]);
         }
         return hashes;
       },
       ["", "", ""]
     );
 
-    for (let i = 0; i < loops.length; i++) {
-      if (original[i] === hashes[i] && loops[i] === 0) {
-        loops[i] = l;
+    for (let l = 0; l < loops.length; l++) {
+      if (original[l] === hashes[l] && loops[l] === 0) {
+        loops[l] = loop;
       }
     }
   }

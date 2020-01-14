@@ -60,7 +60,7 @@ suite("Day 12: The N-Body Problem", () => {
     const expectedAnswer = 312992287193064;
     test(`Answer is ${expectedAnswer}`, () => {
       const input = fetchInput();
-      assert.equal(loop(input, 1000), expectedAnswer);
+      assert.equal(loop(input), expectedAnswer);
     });
   });
 });
