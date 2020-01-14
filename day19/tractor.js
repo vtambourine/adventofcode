@@ -38,111 +38,25 @@ function scan(program, [width, height] = [50, 50]) {
 function ship(program) {
   const codes = parseInput(program);
 
-  // const xytoi = (x, y) => y * width + x;
-  // const itoxy = i => Math.floor(i / width) + (i % width);
-
-  // const area = new Array(width * height).fill(0);
-
-  function isSquare([ai, aj], [bi, bj]) {
-    if (bj - aj === 10 && bi - ai >= 10) {
-      return true;
-    }
-    return false;
-  }
-
-  function scanLine(n, start = 0) {
-    // scan n-th line
-    // return '...#####'
-    let c = start;
-    let row = "";
-    let halt = false;
-    let g = 1e4;
-    let lastChar;
-    let char;
-    let input = [];
-    while (g-- && !halt) {
-      new Computer(codes).run(
-        () => {
-          if (!input.length) {
-            input = [c++, n];
-          }
-          return input.shift();
-        },
-        status => {
-          lastChar = char;
-          if (status === STATIONARY) {
-            char = ".";
-          }
-          if (status === PULLED) {
-            char = "#";
-          }
-          if (lastChar === "#" && char === ".") {
-            halt = true;
-          } else {
-            row += char;
-          }
-        }
-      );
-    }
-
-    // console.log("row", n);
-    // console.log(row);
-    return row;
-  }
-
-  function hasSquare(area, n = 100) {
-    // check if area has a square with side n
-    if (area.length < 10) return false;
-
-    return (
-      area[0][area[0].length - n] === "#" &&
-      area[n - 1][area[0].length - n] === "#"
+  function probe(x, y) {
+    let input = [x, y];
+    let output;
+    new Computer(codes).run(
+      () => input.shift(),
+      status => (output = status)
     );
+    return output;
   }
 
-  let l = 0;
-  let lineStack = [];
-  let g = 1e4;
-  while (g-- && !hasSquare(lineStack)) {
-    if (lineStack.length === 100) {
-      lineStack.shift();
+  let [x, y] = [0, 0];
+  while (probe(x + 99, y) === STATIONARY) {
+    y++;
+    while (probe(x, y + 99) === STATIONARY) {
+      x++;
     }
-    lineStack.push(scanLine(l++));
   }
 
-  // console.log(lineStack.join("\n"));
-
-  let y = l - 11;
-  let x = lineStack[0].length - 10;
-
-  return 10000 * x + y;
-  //
-  // let output = "";
-  // for (let j = 0; j < height; j++) {
-  //   for (let i = 0; i < width; i++) {
-  //     output += area[xytoi(i, j)];
-  //   }
-  //   output += "\n";
-  // }
-  //
-  // console.log(output);
-
-  return 0;
+  return x * 10000 + y;
 }
 
 module.exports = { scan, ship };
-
-/*
-
-.............................................................###############
-..............................................................###############
-..............................................................###############
-...............................................................###############
-................................................................###############
-................................................................###############
-.................................................................###############
-.................................................................################
-..................................................................################
-..................................................................################
-
- */
