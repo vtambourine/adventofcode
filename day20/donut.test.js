@@ -74,9 +74,9 @@ suite("Day 20: Donut Maze", () => {
       });
     });
 
-    const answer = 5182;
-    test.skip(`Answer is ${answer}`, () => {
-      const input = fetchInput();
+    const answer = 570;
+    test(`Answer is ${answer}`, () => {
+      const input = fetchInput({ trim: false });
       assert.equal(path(input), answer);
     });
   });
