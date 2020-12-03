@@ -1,6 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
+const YEAR = "2019";
+
 function fetchInput({ trim } = { trim: true }) {
   const projectName = path
     .resolve(__dirname, "..")
@@ -14,7 +16,7 @@ function fetchInput({ trim } = { trim: true }) {
     .match(`${projectName}\/([0-9a-z]+)\/`)[1];
 
   const input = fs.readFileSync(
-    path.resolve(process.cwd(), dayName, `${dayName}.input`),
+    path.resolve(process.cwd(), YEAR, dayName, `${dayName}.input`),
     {
       encoding: "utf8",
     }
