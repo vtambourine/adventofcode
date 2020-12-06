@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "description": "Awkward approach to Advent of Code 2019",
   "author": "Benjamin T <vtambourine@ya.ru>",
+  "private": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vtambourine/adventofcode.git"
   },
   "scripts": {
-    "tests": "mocha 2019/day*/*.test.js",
+    "test": "mocha 2019/day*/*.test.js",
     "watch": "mocha --watch 2019/day*/*.test.js"
   },
   "devDependencies": {
