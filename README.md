@@ -11,4 +11,5 @@ Awkward [Advent of Code 2019](https://adventofcode.com/2019) solutions.
 ### Notable solutions
 
 * [mjpieters/adventofcode](https://github.com/mjpieters/adventofcode) and [Jupyter notebook](https://nbviewer.jupyter.org/github/mjpieters/adventofcode/tree/master/2019/)
-* [petertseng/adventofcode-rb-2019](https://github.com/petertseng/adventofcode-rb-2019) 
+* [petertseng/adventofcode-rb-2019](https://github.com/petertseng/adventofcode-rb-2019)
+* [nlowe/aoc2020](https://github.com/nlowe/aoc2020) 
