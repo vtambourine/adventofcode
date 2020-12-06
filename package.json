@@ -12,8 +12,8 @@
     "watch": "mocha --watch 2019/day*/*.test.js"
   },
   "devDependencies": {
-    "mocha": "^6.2.2",
-    "prettier": "^1.19.1"
+    "mocha": "^8.2.1",
+    "prettier": "^2.2.1"
   },
   "mocha": {
     "ui": "tdd",
