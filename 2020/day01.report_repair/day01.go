@@ -7,7 +7,7 @@ import (
 
 const targetSum = 2020
 
-func Two(input *challenge.Challenge) int {
+func twoSum(input *challenge.Challenge) int {
 	index := make(map[int]int)
 
 	for _, n := range input.IntSlice() {
@@ -20,8 +20,8 @@ func Two(input *challenge.Challenge) int {
 	panic("no solution")
 }
 
-func Three(c *challenge.Challenge) int {
-	entries := c.IntSlice()
+func threeSum(input *challenge.Challenge) int {
+	entries := input.IntSlice()
 
 	for i := range entries {
 		for j := i + 1; j < len(entries)-1; j++ {
@@ -37,6 +37,6 @@ func Three(c *challenge.Challenge) int {
 }
 
 func Register(s command.Solutions) {
-	s.Register(1, "a", Two)
-	s.Register(1, "b", Three)
+	s.Register(1, "a", twoSum)
+	s.Register(1, "b", threeSum)
 }
