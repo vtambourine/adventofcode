@@ -1,16 +1,17 @@
 package day06
 
 import (
+	"math/bits"
+
 	"github.com/vtambourine/adventofcode/2020/challenge"
 	"github.com/vtambourine/adventofcode/2020/command"
-	"math/bits"
 )
 
-func AnyoneYes(c *challenge.Challenge) int {
+func anyoneYes(input *challenge.Challenge) int {
 	result := 0
 
 	var bitmap uint
-	for line := range c.Lines() {
+	for line := range input.Lines() {
 		if line == "" {
 			result += bits.OnesCount(bitmap)
 			bitmap = 0
@@ -25,11 +26,11 @@ func AnyoneYes(c *challenge.Challenge) int {
 	return result + bits.OnesCount(bitmap)
 }
 
-func EveryoneYes(c *challenge.Challenge) int {
+func everyoneYes(input *challenge.Challenge) int {
 	result := 0
 
 	var bitmap = ^uint(0)
-	for line := range c.Lines() {
+	for line := range input.Lines() {
 		if line == "" {
 			result += bits.OnesCount(bitmap)
 			bitmap = ^uint(0)
@@ -48,6 +49,6 @@ func EveryoneYes(c *challenge.Challenge) int {
 }
 
 func Register(s command.Solutions) {
-	s.Register(6, "a", AnyoneYes)
-	s.Register(6, "b", EveryoneYes)
+	s.Register(6, "a", anyoneYes)
+	s.Register(6, "b", everyoneYes)
 }
