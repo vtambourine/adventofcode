@@ -1,6 +1,5 @@
 package day05
 
-//
 type pass struct {
 	row, col, id int
 }
