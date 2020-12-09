@@ -14,6 +14,7 @@ import (
 	"github.com/vtambourine/adventofcode/2020/day05.binary_boarding"
 	"github.com/vtambourine/adventofcode/2020/day06.custom_customs"
 	"github.com/vtambourine/adventofcode/2020/day07.handy_haversacks"
+	"github.com/vtambourine/adventofcode/2020/day09.encoding_error"
 )
 
 var (
@@ -28,6 +29,8 @@ func init() {
 	day05.Register(solutions)
 	day06.Register(solutions)
 	day07.Register(solutions)
+	//day08.Register(solutions)
+	day09.Register(solutions)
 }
 
 func main() {
