@@ -7,8 +7,7 @@ import (
 	"github.com/vtambourine/adventofcode/2020/challenge"
 )
 
-var examples = []string{
-	`..##.......
+var example = `..##.......
 #...#...#..
 .#....#..#.
 ..#.#...#.#
@@ -18,53 +17,28 @@ var examples = []string{
 .#........#
 #.##...#...
 #...##....#
-.#..#...#.#`,
-}
+.#..#...#.#`
 
 func TestTrees(t *testing.T) {
-	tests := []struct {
-		input string
-		want  int
-	}{
-		{
-			examples[0],
-			7,
-		},
-	}
+	input := challenge.ReadChallengeFromLiteral(example)
+	got := trees(input)
+	assert.Equal(t, 7, got)
+}
 
-	for _, c := range tests {
-		input := challenge.ReadChallengeFromLiteral(c.input)
-		got := Trees(input)
-		assert.Equal(t, c.want, got)
-	}
+func TestSlopes(t *testing.T) {
+	input := challenge.ReadChallengeFromLiteral(example)
+	got := slopes(input)
+	assert.Equal(t, 336, got)
 }
 
 func TestPartOne(t *testing.T) {
 	input := challenge.ReadChallengeFromFile("./day03.input")
-	got := Trees(input)
+	got := trees(input)
 	assert.Equal(t, 220, got)
-}
-
-func TestSlopes(t *testing.T) {
-	tests := []struct {
-		input string
-		want  int
-	}{
-		{
-			examples[0],
-			336,
-		},
-	}
-
-	for _, c := range tests {
-		input := challenge.ReadChallengeFromLiteral(c.input)
-		got := Slopes(input)
-		assert.Equal(t, c.want, got)
-	}
 }
 
 func TestPartTwo(t *testing.T) {
 	input := challenge.ReadChallengeFromFile("./day03.input")
-	got := Slopes(input)
+	got := slopes(input)
 	assert.Equal(t, 2138320800, got)
 }

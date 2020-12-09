@@ -5,7 +5,7 @@ import (
 	"github.com/vtambourine/adventofcode/2020/command"
 )
 
-const TREE = '#'
+const treeToken = '#'
 
 func countTrees(grid *challenge.Grid, dx, dy int) int {
 	width, height := grid.Size()
@@ -14,7 +14,7 @@ func countTrees(grid *challenge.Grid, dx, dy int) int {
 
 	var x, y int
 	for y < height {
-		if grid.CellAt(x, y) == TREE {
+		if grid.CellAt(x, y) == treeToken {
 			trees++
 		}
 
@@ -26,14 +26,14 @@ func countTrees(grid *challenge.Grid, dx, dy int) int {
 	return trees
 }
 
-func Trees(c *challenge.Challenge) int {
-	grid := c.Grid()
+func trees(input *challenge.Challenge) int {
+	grid := input.Grid()
 
 	return countTrees(grid, 3, 1)
 }
 
-func Slopes(c *challenge.Challenge) int {
-	grid := c.Grid()
+func slopes(input *challenge.Challenge) int {
+	grid := input.Grid()
 
 	result := 1
 	slopes := []struct {
@@ -54,6 +54,6 @@ func Slopes(c *challenge.Challenge) int {
 }
 
 func Register(s command.Solutions) {
-	s.Register(3, "a", Trees)
-	s.Register(3, "b", Slopes)
+	s.Register(3, "a", trees)
+	s.Register(3, "b", slopes)
 }
