@@ -1,10 +1,10 @@
 package day05
 
 import (
-	"github.com/vtambourine/adventofcode/2020/challenge"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/vtambourine/adventofcode/2020/challenge"
 )
 
 var passes = []struct {
@@ -26,7 +26,7 @@ func TestParsePass(t *testing.T) {
 
 func TestPartOne(t *testing.T) {
 	input := challenge.ReadChallengeFromFile("./day05.input")
-	got := HighestSeat(input)
+	got := highestSeat(input)
 	assert.Equal(t, 970, got)
 }
 
