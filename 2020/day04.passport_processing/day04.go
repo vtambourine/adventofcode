@@ -5,10 +5,10 @@ import (
 	"github.com/vtambourine/adventofcode/2020/command"
 )
 
-func ValidPassports(c *challenge.Challenge) int {
+func validPassports(input *challenge.Challenge) int {
 	count := 0
 
-	lines := c.Lines()
+	lines := input.Lines()
 	for {
 		p, ok := parsePassport(lines)
 
@@ -24,10 +24,10 @@ func ValidPassports(c *challenge.Challenge) int {
 	return count
 }
 
-func StrictlyValidPassports(c *challenge.Challenge) int {
+func strictlyValidPassports(input *challenge.Challenge) int {
 	count := 0
 
-	lines := c.Lines()
+	lines := input.Lines()
 	for {
 		p, ok := parsePassport(lines)
 
@@ -44,6 +44,6 @@ func StrictlyValidPassports(c *challenge.Challenge) int {
 }
 
 func Register(s command.Solutions) {
-	s.Register(4, "a", ValidPassports)
-	s.Register(4, "b", StrictlyValidPassports)
+	s.Register(4, "a", validPassports)
+	s.Register(4, "b", strictlyValidPassports)
 }

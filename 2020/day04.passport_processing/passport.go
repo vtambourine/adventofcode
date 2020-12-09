@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+//
 const (
 	fieldBirthYear      = "byr"
 	fieldIssueYear      = "iyr"

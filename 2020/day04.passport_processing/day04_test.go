@@ -62,15 +62,9 @@ func TestValidPassports(t *testing.T) {
 
 	for _, c := range tests {
 		input := challenge.ReadChallengeFromLiteral(c.input)
-		got := ValidPassports(input)
+		got := validPassports(input)
 		assert.Equal(t, c.want, got)
 	}
-}
-
-func TestPartOne(t *testing.T) {
-	input := challenge.ReadChallengeFromFile("./day04.input")
-	got := ValidPassports(input)
-	assert.Equal(t, 216, got)
 }
 
 func TestStrictlyValidPassports(t *testing.T) {
@@ -85,13 +79,19 @@ func TestStrictlyValidPassports(t *testing.T) {
 
 	for _, c := range tests {
 		input := challenge.ReadChallengeFromLiteral(c.input)
-		got := StrictlyValidPassports(input)
+		got := strictlyValidPassports(input)
 		assert.Equal(t, c.want, got)
 	}
 }
 
+func TestPartOne(t *testing.T) {
+	input := challenge.ReadChallengeFromFile("./day04.input")
+	got := validPassports(input)
+	assert.Equal(t, 216, got)
+}
+
 func TestPartTwo(t *testing.T) {
 	input := challenge.ReadChallengeFromFile("./day04.input")
-	got := StrictlyValidPassports(input)
+	got := strictlyValidPassports(input)
 	assert.Equal(t, 150, got)
 }
