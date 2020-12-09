@@ -69,6 +69,6 @@ func NewPolicy(c *challenge.Challenge) int {
 }
 
 func Register(s command.Solutions) {
-	s.Register(1, "a", Policy)
-	s.Register(1, "b", NewPolicy)
+	s.Register(2, "a", Policy)
+	s.Register(2, "b", NewPolicy)
 }
