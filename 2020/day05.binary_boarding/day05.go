@@ -2,6 +2,7 @@ package day05
 
 import (
 	"github.com/vtambourine/adventofcode/2020/challenge"
+	"github.com/vtambourine/adventofcode/2020/command"
 	"github.com/vtambourine/adventofcode/2020/util"
 	"sort"
 )
@@ -29,4 +30,9 @@ func MissingSeat(c *challenge.Challenge) int {
 		}
 	}
 	panic("no solution")
+}
+
+func Register(s command.Solutions) {
+	s.Register(5, "a", HighestSeat)
+	s.Register(5, "b", MissingSeat)
 }

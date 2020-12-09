@@ -1,6 +1,7 @@
 package day02
 
 import (
+	"github.com/vtambourine/adventofcode/2020/command"
 	"regexp"
 	"strings"
 
@@ -65,4 +66,9 @@ func NewPolicy(c *challenge.Challenge) int {
 	}
 
 	return valid
+}
+
+func Register(s command.Solutions) {
+	s.Register(1, "a", Policy)
+	s.Register(1, "b", NewPolicy)
 }

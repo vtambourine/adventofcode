@@ -2,8 +2,12 @@ package challenge
 
 import (
 	"bufio"
+	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
+	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 )
@@ -34,6 +38,36 @@ func newChallengeFromReader(r io.Reader, c io.Closer) *Challenge {
 	}()
 
 	return challenge
+}
+
+func ReadFromDay(day int) *Challenge {
+	_, sourceFile, _, ok := runtime.Caller(1)
+	if !ok {
+		panic("failed to determine input path")
+	}
+
+	daysDirs, err := ioutil.ReadDir(filepath.Dir(sourceFile))
+	if err != nil {
+		panic(err)
+	}
+
+	var path string
+	for _, d := range daysDirs {
+		if strings.HasPrefix(d.Name(), fmt.Sprintf("day%02d", day)) {
+			path = filepath.Join(filepath.Dir(sourceFile), d.Name(), fmt.Sprintf("day%02d.input", day))
+		}
+	}
+
+	if path == "" {
+		panic(fmt.Sprintf("failed to determine input path for day %d", day))
+	}
+
+	file, err := os.Open(path)
+	if err != nil {
+		panic(err)
+	}
+
+	return newChallengeFromReader(file, file)
 }
 
 func ReadChallengeFromFile(path string) *Challenge {

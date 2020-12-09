@@ -2,6 +2,7 @@ package day06
 
 import (
 	"github.com/vtambourine/adventofcode/2020/challenge"
+	"github.com/vtambourine/adventofcode/2020/command"
 	"math/bits"
 )
 
@@ -44,4 +45,9 @@ func EveryoneYes(c *challenge.Challenge) int {
 	}
 
 	return result + bits.OnesCount(bitmap)
+}
+
+func Register(s command.Solutions) {
+	s.Register(6, "a", AnyoneYes)
+	s.Register(6, "b", EveryoneYes)
 }

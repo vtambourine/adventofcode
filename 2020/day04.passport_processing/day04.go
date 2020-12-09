@@ -2,6 +2,7 @@ package day04
 
 import (
 	"github.com/vtambourine/adventofcode/2020/challenge"
+	"github.com/vtambourine/adventofcode/2020/command"
 )
 
 func ValidPassports(c *challenge.Challenge) int {
@@ -40,4 +41,9 @@ func StrictlyValidPassports(c *challenge.Challenge) int {
 	}
 
 	return count
+}
+
+func Register(s command.Solutions) {
+	s.Register(4, "a", ValidPassports)
+	s.Register(4, "b", StrictlyValidPassports)
 }

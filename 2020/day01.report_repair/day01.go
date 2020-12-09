@@ -2,6 +2,7 @@ package day01
 
 import (
 	"github.com/vtambourine/adventofcode/2020/challenge"
+	"github.com/vtambourine/adventofcode/2020/command"
 )
 
 const TARGET_SUM = 2020
@@ -33,4 +34,9 @@ func Three(c *challenge.Challenge) int {
 	}
 
 	panic("no solution")
+}
+
+func Register(s command.Solutions) {
+	s.Register(1, "a", Two)
+	s.Register(1, "b", Three)
 }
