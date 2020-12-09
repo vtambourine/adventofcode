@@ -20,12 +20,7 @@ func FirstInvalidWithPreamble(c *challenge.Challenge, preamble int) int {
 	index := make(map[int]bool)
 	window := make([]int, preamble)
 
-	for _, n := range c.IntSlice() {
-		println(n)
-	}
-
 	for i, n := range c.IntSlice() {
-		println(n)
 		if i >= preamble {
 			if !twoSum(window, n) {
 				return n
@@ -56,7 +51,6 @@ func WeaknessWithPreamble(c *challenge.Challenge, preamble int) int {
 
 	for i, n := range c.IntSlice() {
 		slice = append(slice, n)
-		println(n)
 		if i >= preamble {
 			if !twoSum(window, n) {
 				target = n
