@@ -13,24 +13,24 @@ var example = `1-3 a: abcde
 
 func TestValidPassports(t *testing.T) {
 	input := challenge.ReadChallengeFromLiteral(example)
-	got := validPassports(input)
+	got := validPasswords(input)
 	assert.Equal(t, 2, got)
 }
 
 func TestStrictlyValidPassports(t *testing.T) {
 	input := challenge.ReadChallengeFromLiteral(example)
-	got := strictlyValidPassports(input)
+	got := strictlyValidPasswords(input)
 	assert.Equal(t, 1, got)
 }
 
 func TestPartOne(t *testing.T) {
 	input := challenge.ReadChallengeFromFile("./day02.input")
-	got := validPassports(input)
+	got := validPasswords(input)
 	assert.Equal(t, 456, got)
 }
 
 func TestPartTwo(t *testing.T) {
 	input := challenge.ReadChallengeFromFile("./day02.input")
-	got := strictlyValidPassports(input)
+	got := strictlyValidPasswords(input)
 	assert.Equal(t, 308, got)
 }
