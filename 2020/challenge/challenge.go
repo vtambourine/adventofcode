@@ -137,15 +137,33 @@ func (g *Grid) Size() (int, int) {
 	return g.width, g.height
 }
 
+func (g *Grid) Cells() []rune {
+	return g.cells
+}
+
 func (g *Grid) boundsCheck(x, y int) {
 	if x < 0 || y < 0 || x >= g.width || y >= g.height {
 		panic("out of bounds")
 	}
 }
 
+func (g *Grid) inBounds(x, y int) bool {
+	if x < 0 || y < 0 || x >= g.width || y >= g.height {
+		return false
+	}
+	return true
+}
+
 func (g *Grid) indexOf(x, y int) int {
 	g.boundsCheck(x, y)
 	return x + (g.width * y)
+}
+
+func (g *Grid) CoordinatesOf(i int) (int, int) {
+	if i >= g.width*g.height {
+		panic("index out of bounds")
+	}
+	return i % g.width, i / g.width
 }
 
 func (g *Grid) SetCell(x, y int, cell rune) {
@@ -155,4 +173,32 @@ func (g *Grid) SetCell(x, y int, cell rune) {
 func (g *Grid) CellAt(x, y int) rune {
 	g.boundsCheck(x, y)
 	return g.cells[g.indexOf(x, y)]
+}
+
+var directions = [][2]int{
+	{-1, -1}, {0, -1}, {1, -1},
+	{-1, 0}, {1, -0},
+	{-1, 1}, {0, 1}, {1, 1},
+}
+
+func (g *Grid) NeighboursAt(x, y int) []rune {
+	n := make([]rune, 0)
+	var dx, dy int
+	for _, d := range directions {
+		dx, dy = x+d[0], y+d[1]
+		if g.inBounds(dx, dy) {
+			n = append(n, g.CellAt(dx, dy))
+		}
+	}
+	return n
+}
+
+func (g *Grid) Equal(other *Grid) bool {
+	for i, c := range g.Cells() {
+		xa, ya := g.CoordinatesOf(i)
+		if c != other.CellAt(xa, ya) {
+			return false
+		}
+	}
+	return true
 }

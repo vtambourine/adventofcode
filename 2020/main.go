@@ -16,6 +16,7 @@ import (
 	"github.com/vtambourine/adventofcode/2020/day07.handy_haversacks"
 	"github.com/vtambourine/adventofcode/2020/day09.encoding_error"
 	"github.com/vtambourine/adventofcode/2020/day10.adapter_array"
+	"github.com/vtambourine/adventofcode/2020/day11.seating_system"
 )
 
 var (
@@ -33,6 +34,7 @@ func init() {
 	//day08.Register(solutions)
 	day09.Register(solutions)
 	day10.Register(solutions)
+	day11.Register(solutions)
 }
 
 func main() {
